@@ -1,0 +1,112 @@
+openapi: 3.0.0
+info:
+  title: API Padrão Boxnet
+  description: >
+    API para integração e obtenção de clippings da plataforma Boxnet. 
+    A autenticação é feita enviando as credenciais no corpo da requisição.
+  version: 1.0.0
+servers:
+  - url: https://cloud.boxnet.com.br/api/ClippingsCortex
+    description: Servidor de Produção
+paths:
+  /api/Clippings:
+    post:
+      summary: Obter Clippings
+      description: Retorna uma lista de clippings baseada na autenticação fornecida.
+      operationId: getClippings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - integrationid
+                - password
+              properties:
+                integrationid:
+                  type: string
+                  description: ID de Integração fornecido pela Boxnet.
+                  example: "CAA40A07-CF47-4FBC-9153-76F43FFXE34ADA"
+                password:
+                  type: string
+                  description: Senha fornecida pela Boxnet.
+                  example: "D0740A7980C323A9993897BJA66847DC99A5C928"
+      responses:
+        '200':
+          description: Requisição bem-sucedida. Retorna os dados dos clippings.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Clipping'
+        '401':
+          description: Não autorizado. Credenciais inválidas.
+components:
+  schemas:
+    Clipping:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        Titulo:
+          type: string
+          nullable: true
+        Secao:
+          type: string
+          nullable: true
+        IDSecao:
+          type: string
+          nullable: true
+        Coordenadas:
+          type: string
+          nullable: true
+        Pagina:
+          type: array
+          items:
+            type: string
+          nullable: true          
+        Midia:
+          type: string
+          nullable: true
+        IdVeiculo:
+          type: integer
+          format: int32
+        Veiculo:
+          type: string
+        ProgramaCaderno:  
+          type: string
+          nullable: true
+        Valoracao:
+          type: number
+          format: double
+          nullable: true        
+        CentimetragemGeral:
+          type: integer
+          nullable: true
+        Impacto:
+          type: integer
+          format: int64
+          nullable: true  
+        Jornalistas:
+          type: array
+          items:
+            type: string
+          nullable: true
+        DataFonte:
+          type: string
+          format: date-time
+          nullable: true
+        DataCadastro:
+          type: string
+          format: date-time
+          nullable: true
+        DataLiberacao:
+          type: string
+          format: date-time
+          nullable: true
+        Conteudo:
+          type: string
+          nullable: true
